@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row book-detail">
+        <div class="col-md-6">
+            {% if book.cover_image %}
+            <div class="book-cover my-3">
+                <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" class="cover-image img-thumbnail">
+            </div>
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <h1 class="display-4">{{ book.title }}</h1>
+            <p class="lead"><strong>Author:</strong> {{ book.author }}</p>
+            <p><strong>Description:</strong> {{ book.description }}</p>
+            <p><strong>Price:</strong> ${{ book.price }}</p>
+            <p><strong>Published on:</strong> {{ book.publication_date }}</p>
+            <p><strong>Average Rating:</strong> {{ book.average_rating }} / 5</p>
+            <div class="cart-action mt-3">
+                <form method="POST" action="{% url 'add_to_cart' book.id %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="quantity">Quantity:</label>
+                        <input type="number" id="quantity" name="quantity" class="form-control" value="1" min="1">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Add to Cart</button>
+                </form>
+            </div>
+            <form method="POST" action="{% url 'rate_book' book.id %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="rating">Rate this book:</label>
+                    <select id="rating" name="rating" class="form-control" required>
+                        <option value="" disabled selected>Select a rating</option>
+                        <option value="1" {% if user_rating and user_rating.rating == 1 %}selected{% endif %}>1 Star</option>
+                        <option value="2" {% if user_rating and user_rating.rating == 2 %}selected{% endif %}>2 Stars</option>
+                        <option value="3" {% if user_rating and user_rating.rating == 3 %}selected{% endif %}>3 Stars</option>
+                        <option value="4" {% if user_rating and user_rating.rating == 4 %}selected{% endif %}>4 Stars</option>
+                        <option value="5" {% if user_rating and user_rating.rating == 5 %}selected{% endif %}>5 Stars</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Submit Rating</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

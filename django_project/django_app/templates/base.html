@@ -1,0 +1,126 @@
+{% load static %}
+{% load cart_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Online Bookstore</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+</head>
+<body>
+    <div class="wrapper">
+        <header class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="#">Online Bookstore</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'book_list' %}">Books</a>
+                        </li>
+                    </ul>
+                    <form method="GET" action="{% url 'search_books' %}" class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" name="q" placeholder="Search books...">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form>
+                    <ul class="navbar-nav ml-auto">
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'cart_detail' %}">
+                                    <i class="fas fa-shopping-cart"></i> Cart (<span id="cart-item-count">{% cart_item_count user %}</span>)
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'login' %}">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'signup' %}">Sign Up</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </header>
+        <main class="main-content container mt-4">
+            {% block content %}
+            {% endblock %}
+        </main>
+        <footer class="footer bg-light py-3">
+            <div class="container">
+                <p>&copy; 2024 Online Bookstore</p>
+                <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a> | <a href="#">Contact Us</a></p>
+            </div>
+        </footer>
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const stars = document.querySelectorAll('.star-rating label');
+        const inputs = document.querySelectorAll('.star-rating input');
+
+        stars.forEach(star => {
+            star.addEventListener('mouseover', function() {
+                resetStars();
+                const value = this.getAttribute('for').split('-')[1];
+                highlightStars(value);
+            });
+
+            star.addEventListener('mouseout', function() {
+                const checkedInput = document.querySelector('.star-rating input:checked');
+                if (checkedInput) {
+                    highlightStars(checkedInput.value);
+                } else {
+                    resetStars();
+                }
+            });
+
+            star.addEventListener('click', function() {
+                const value = this.getAttribute('for').split('-')[1];
+                document.getElementById('rating-' + value).checked = true;
+                highlightStars(value);
+                document.querySelector('.rating form').submit(); // submit the form
+            });
+        });
+
+        inputs.forEach(input => {
+            input.addEventListener('change', function() {
+                resetStars();
+                highlightStars(this.value);
+            });
+        });
+
+        function resetStars() {
+            stars.forEach(star => {
+                star.classList.remove('text-warning');
+            });
+        }
+
+        function highlightStars(value) {
+            stars.forEach(star => {
+                const starValue = star.getAttribute('for').split('-')[1];
+                if (starValue <= value) {
+                    star.classList.add('text-warning');
+                }
+            });
+        }
+
+        // Initial highlight
+        const checkedInput = document.querySelector('.star-rating input:checked');
+        if (checkedInput) {
+            highlightStars(checkedInput.value);
+        }
+    });
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

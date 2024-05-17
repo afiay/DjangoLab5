@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="checkout-container">
+    <h1>Checkout</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="shipping_address">Shipping Address</label>
+            {{ form.shipping_address }}
+        </div>
+        <div class="form-group">
+            <label for="city">City</label>
+            {{ form.city }}
+        </div>
+        <div class="form-group">
+            <label for="postal_code">Postal Code</label>
+            {{ form.postal_code }}
+        </div>
+        <h3>Total: ${{ cart.total_price }}</h3>
+        <button type="submit" class="btn btn-primary">Place Order</button>
+    </form>
+</div>
+{% endblock %}
+
+<style>
+.checkout-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+</style>

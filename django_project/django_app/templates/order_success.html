@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="order-success-container">
+    <h1>Order Successful!</h1>
+    <p>Your order (ID: {{ order.id }}) has been placed successfully.</p>
+    <p>Total Amount: ${{ order.total_price }}</p>
+    <p>Shipping Address: {{ order.shipping_address }}, {{ order.city }}, {{ order.postal_code }}</p>
+</div>
+{% endblock %}
+
+<style>
+.order-success-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+</style>
