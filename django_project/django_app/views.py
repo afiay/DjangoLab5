@@ -1,16 +1,15 @@
-from .forms import CheckoutForm
-from .models import Cart, Order, Book, CartItem
-from django.shortcuts import render, redirect
-from .models import Book, Cart, CartItem, Rating
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-from django.shortcuts import redirect, render, get_object_or_404
 from django.db.models import Q, Avg
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.views.decorators.http import require_POST
+
+from .forms import CheckoutForm
+from .models import Cart, Order, Book, CartItem, Rating
+
 
 
 def book_list(request):
@@ -46,7 +45,6 @@ def book_list(request):
                 query)) | Q(description__icontains(query))
         )
 
-    # Debug: print the filtered queryset count
     print("Books count after filtering:", books.count())
 
     return render(request, 'books/book_list.html', {
