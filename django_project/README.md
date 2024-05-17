@@ -2,6 +2,7 @@
 
 This is a Django-based web application for an online bookstore. Users can browse books, add them to a cart, and proceed to checkout.
 
+![image](https://github.com/afiay/DjangoLab5/assets/59549940/dea9f540-31e2-4fbb-b94b-7e876961ada4)
 
 ## Features
 
